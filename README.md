@@ -60,15 +60,16 @@ Bei laufender Ollama-App ist kein zweiter Server nötig. In einem weiteren Termi
 
 ~~~sh
 ollama list
-# Nur falls das Modell fehlt: mehrere GB Download
-ollama pull srchmnmichael/qwen3.5-9B-uncensored:latest
+# Nur falls das Modell fehlt: rund 6,6 GB Download
+ollama pull qwen3.5:latest
 local-search doctor
 ~~~
 
-Dieses Modell ist die Voreinstellung. Ein anderes installiertes Modell wählen:
+Dieses Modell aus der offiziellen Ollama-Library ist die Voreinstellung. Ein
+anderes installiertes Modell wählen, etwa eine kleinere Variante:
 
 ~~~sh
-local-search model qwen3.5:latest
+local-search model qwen3.5:4b
 ~~~
 
 Modell und Loopback-URL stehen in ~/.config/local-search/config.json.
@@ -76,7 +77,8 @@ Vor jeder Modellanfrage werden die Ollama-Metadaten geprüft: Cloud-Modelle,
 Remote-Aliasse und Modelle ohne erkennbare lokale Gewichte werden abgewiesen.
 Der Installer lädt weder Ollama noch Modellgewichte ungefragt herunter.
 Modellgewichte sind nicht Teil dieses MIT-Projekts; ihre eigenen Lizenzbedingungen
-gelten. Der Standardtag ist ein Community-Modell und kann sich ändern.
+gelten. Der Standardtag verweist auf die jeweils aktuelle Version und kann sich
+ändern; ein Tag mit fester Größe wie qwen3.5:4b ist reproduzierbarer.
 
 ## Home und weitere Ordner
 
@@ -126,6 +128,8 @@ Arbeitsverzeichnis verwendet. --all durchsucht alle registrierten Wurzeln.
 
 Ausgabe: JSON mit Treffern, Quellen, Backend, Aktualität, Warnungen und
 truncated. Standardmäßig höchstens 40 Treffer. --limit 100 erhöht das Limit.
+Jeder Report nennt zusätzlich match_count für seine Wurzel und Suchanfrage; bei
+truncated ist damit erkennbar, welche Wurzel gekappt wurde.
 Zeilentexte sind auf 2.000 Zeichen begrenzt; ask erhält höchstens rund 12.000
 JSON-Zeichen Quellenkontext und führt maximal drei Suchbegriffe pro Wurzel aus.
 
@@ -193,6 +197,10 @@ entfernt werden.
 - macOS-Zugriff verweigert: betreffende Ordner benötigen ggf. Zugriff für das
   verwendete Terminal. Nicht lesbare Pfade werden als Fehler gemeldet.
 - Index hängt: local-search status und server.log im gemeldeten Indexpfad lesen.
+- "PID identity changed": die vermerkte Prozess-ID gehört inzwischen zu einem
+  fremden Prozess, deshalb wird kein Signal gesendet. Mit ps die gemeldete PID
+  prüfen, den Prozess gegebenenfalls selbst beenden und danach owner.json im
+  gemeldeten Indexpfad löschen. Erst dann startet local-search wieder.
 - Große Verzeichnisse: mit ausgewählten Projektwurzeln beginnen; Home verbraucht
   je nach Inhalt erheblich Plattenplatz. Der Server startet mit 512 MiB
   Indexaufbau-Budget und 25 % CPU-Budget; dies ist kein hartes Prozess-RAM-Limit.
@@ -221,6 +229,10 @@ mit ausschließlich synthetischem Quelltext: python3 scripts/smoke_ollama.py.
 
 MIT, siehe [LICENSE](LICENSE). Unabhängiges Integrationsprojekt, kein offizielles
 Microsoft-, Anthropic- oder OpenAI-Produkt.
+
+Autorschaft: Implementierung geschrieben mit OpenAI Astra. Review und
+Überarbeitung durch Claude von Anthropic.
+AI Operator: [H.G.O.D.](https://github.com/Jeuners).
 
 - [Microsoft tgrep](https://github.com/microsoft/tgrep), MIT
 - [ripgrep](https://github.com/BurntSushi/ripgrep), MIT oder Unlicense

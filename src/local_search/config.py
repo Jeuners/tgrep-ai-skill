@@ -9,7 +9,7 @@ from pathlib import Path
 import re
 import tempfile
 
-MODEL = "srchmnmichael/qwen3.5-9B-uncensored:latest"
+MODEL = "qwen3.5:latest"
 EXCLUDES = [
     ".git",
     "node_modules",

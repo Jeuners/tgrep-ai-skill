@@ -71,9 +71,14 @@ def query_roots(roots, queries, regex, limit, fresh):
     for name, root in roots:
         for query in queries:
             result = engine.search(root, query, regex=regex, limit=limit, fresh=fresh)
-            for match in result.pop("matches"):
+            found = result.pop("matches")
+            for match in found:
                 matches[(match["path"], match["line"])] = match
-            reports.append({"root": name, "query": query, **result})
+            # Report the per-root count; the merged list is cut to limit and can
+            # otherwise drop a whole root without saying which one.
+            reports.append(
+                {"root": name, "query": query, "match_count": len(found), **result}
+            )
     ordered = sorted(matches.values(), key=lambda m: (m["path"], m["line"]))
     return {
         "matches": ordered[:limit],

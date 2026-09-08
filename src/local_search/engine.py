@@ -102,7 +102,8 @@ def owned_pid(directory):
         or "serve" not in command
     ):
         raise SearchError(
-            "PID identity changed; refusing to signal an unrelated process."
+            "PID identity changed; refusing to signal an unrelated process. "
+            f"Verify PID {pid}, then remove {owner} to clear stale ownership."
         )
     return pid
 
