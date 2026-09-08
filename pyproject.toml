@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tgrep-ai-skill"
+version = "0.1.0"
+description = "Shared local indexed search for Claude Code and Codex, with Ollama"
+requires-python = ">=3.10"
+license = "MIT"
+dependencies = []
+
+[project.scripts]
+local-search = "local_search.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,62 @@
+{
+  "tgrep": {
+    "aarch64-apple-darwin": {
+      "version": "v1.0.5",
+      "asset": "tgrep-v1.0.5-aarch64-apple-darwin.tar.gz",
+      "url": "https://github.com/microsoft/tgrep/releases/download/v1.0.5/tgrep-v1.0.5-aarch64-apple-darwin.tar.gz",
+      "sha256": "aa7644819d3a6e0202013e6c7c2be2623d5a2bef710249c0b31cc00aa80e19ad",
+      "binary": "tgrep"
+    },
+    "aarch64-unknown-linux-musl": {
+      "version": "v1.0.5",
+      "asset": "tgrep-v1.0.5-aarch64-unknown-linux-musl.tar.gz",
+      "url": "https://github.com/microsoft/tgrep/releases/download/v1.0.5/tgrep-v1.0.5-aarch64-unknown-linux-musl.tar.gz",
+      "sha256": "4d8d6c3cd6c2ca9055f5ab62473e7d772c6383e091a2065d4c5d0fd6d1540639",
+      "binary": "tgrep"
+    },
+    "x86_64-apple-darwin": {
+      "version": "v1.0.5",
+      "asset": "tgrep-v1.0.5-x86_64-apple-darwin.tar.gz",
+      "url": "https://github.com/microsoft/tgrep/releases/download/v1.0.5/tgrep-v1.0.5-x86_64-apple-darwin.tar.gz",
+      "sha256": "a0352e5648ae4c744e344cead5d3b87e7ab3a12c060928db87c379c12036a210",
+      "binary": "tgrep"
+    },
+    "x86_64-unknown-linux-musl": {
+      "version": "v1.0.5",
+      "asset": "tgrep-v1.0.5-x86_64-unknown-linux-musl.tar.gz",
+      "url": "https://github.com/microsoft/tgrep/releases/download/v1.0.5/tgrep-v1.0.5-x86_64-unknown-linux-musl.tar.gz",
+      "sha256": "072b8b5db49bd76d19d2466c1494e579baf4d8a7c74397c9e54c11018f79d333",
+      "binary": "tgrep"
+    }
+  },
+  "rg": {
+    "aarch64-apple-darwin": {
+      "version": "15.2.0",
+      "asset": "ripgrep-15.2.0-aarch64-apple-darwin.tar.gz",
+      "url": "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-aarch64-apple-darwin.tar.gz",
+      "sha256": "3750b2e93f37e0c692657da574d7019a101c0084da05a790c83fd335bad973e4",
+      "binary": "rg"
+    },
+    "aarch64-unknown-linux-musl": {
+      "version": "15.2.0",
+      "asset": "ripgrep-15.2.0-aarch64-unknown-linux-musl.tar.gz",
+      "url": "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-aarch64-unknown-linux-musl.tar.gz",
+      "sha256": "800b1e7206afe799dfb5a6901f23147cfaabe0e52210538100f61e86e1740915",
+      "binary": "rg"
+    },
+    "x86_64-apple-darwin": {
+      "version": "15.2.0",
+      "asset": "ripgrep-15.2.0-x86_64-apple-darwin.tar.gz",
+      "url": "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-apple-darwin.tar.gz",
+      "sha256": "af7825fcc69a2afc7a7aea55fc9af90e26421d8f20fe59df32e233c0b8a231c1",
+      "binary": "rg"
+    },
+    "x86_64-unknown-linux-musl": {
+      "version": "15.2.0",
+      "asset": "ripgrep-15.2.0-x86_64-unknown-linux-musl.tar.gz",
+      "url": "https://github.com/BurntSushi/ripgrep/releases/download/15.2.0/ripgrep-15.2.0-x86_64-unknown-linux-musl.tar.gz",
+      "sha256": "33e15bcf1624b25cdd2a55813a47a2f95dbe126268203e76aa6a585d1e7b149c",
+      "binary": "rg"
+    }
+  }
+}
