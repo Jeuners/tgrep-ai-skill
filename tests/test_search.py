@@ -2,6 +2,7 @@ import contextlib
 import io
 import os
 from pathlib import Path
+import subprocess
 import sys
 import tempfile
 import time
@@ -142,6 +143,66 @@ class ProcessTests(unittest.TestCase):
 
 
 class RoutingTests(IsolatedTest):
+    def test_counts_preserve_root_dropped_by_global_limit(self):
+        first = {"path": "/a/first.py", "line": 1, "text": "needle"}
+        last = {"path": "/z/last.py", "line": 1, "text": "needle"}
+        with patch.object(
+            engine,
+            "search",
+            side_effect=[
+                {"matches": [first], "truncated": False},
+                {"matches": [last], "truncated": True},
+            ],
+        ):
+            result = cli.query_roots(
+                [("first", {}), ("last", {})], ["needle"], False, 1, True
+            )
+        self.assertEqual(result["matches"], [first])
+        self.assertTrue(result["truncated"])
+        self.assertEqual(
+            [(r["root"], r["match_count"]) for r in result["reports"]],
+            [("first", 1), ("last", 1)],
+        )
+        self.assertTrue(result["reports"][1]["truncated"])
+
+    def test_per_root_counts_survive_deduplication(self):
+        match = {"path": "/shared/file.py", "line": 1, "text": "needle"}
+        with patch.object(
+            engine,
+            "search",
+            side_effect=[
+                {"matches": [match], "truncated": False},
+                {"matches": [match], "truncated": False},
+            ],
+        ):
+            result = cli.query_roots(
+                [("parent", {}), ("child", {})], ["needle"], False, 1, True
+            )
+        self.assertEqual(result["matches"], [match])
+        self.assertEqual([r["match_count"] for r in result["reports"]], [1, 1])
+        self.assertFalse(result["truncated"])
+
+    def test_pid_conflict_reports_recovery_without_signaling(self):
+        root = config.add_root("demo", self.root_path)
+        directory = config.index_dir(root)
+        config.atomic_json(
+            directory / "owner.json", {"pid": 1234, "binary": "/bin/tgrep"}
+        )
+        with (
+            patch.object(
+                engine.subprocess,
+                "run",
+                return_value=subprocess.CompletedProcess([], 0, "/bin/unrelated\n"),
+            ),
+            patch.object(engine.os, "kill") as kill,
+        ):
+            with self.assertRaises(config.SearchError) as error:
+                engine.stop(root)
+            self.assertIn("1234", str(error.exception))
+            self.assertIn(str(directory / "owner.json"), str(error.exception))
+            kill.assert_not_called()
+        self.assertTrue((directory / "owner.json").exists())
+
     def test_slow_start_is_preserved(self):
         root = config.add_root("demo", self.root_path)
         with (

@@ -78,7 +78,8 @@ Remote-Aliasse und Modelle ohne erkennbare lokale Gewichte werden abgewiesen.
 Der Installer lädt weder Ollama noch Modellgewichte ungefragt herunter.
 Modellgewichte sind nicht Teil dieses MIT-Projekts; ihre eigenen Lizenzbedingungen
 gelten. Der Standardtag verweist auf die jeweils aktuelle Version und kann sich
-ändern; ein Tag mit fester Größe wie qwen3.5:4b ist reproduzierbarer.
+ändern. Ein Tag wie qwen3.5:4b legt die Modellgröße fest, bleibt aber ebenfalls
+veränderlich und garantiert keine unveränderten Modellgewichte.
 
 ## Home und weitere Ordner
 
@@ -128,8 +129,12 @@ Arbeitsverzeichnis verwendet. --all durchsucht alle registrierten Wurzeln.
 
 Ausgabe: JSON mit Treffern, Quellen, Backend, Aktualität, Warnungen und
 truncated. Standardmäßig höchstens 40 Treffer. --limit 100 erhöht das Limit.
-Jeder Report nennt zusätzlich match_count für seine Wurzel und Suchanfrage; bei
-truncated ist damit erkennbar, welche Wurzel gekappt wurde.
+Jeder Report nennt zusätzlich match_count: die pro Wurzel und Suchanfrage
+gelieferten Treffer vor der globalen Zusammenführung. Diese Zahl ist bereits
+durch das jeweilige Suchlimit begrenzt; bei report.truncated können weitere,
+nicht gezählte Treffer existieren. Die Summe kann wegen der Deduplizierung größer
+als die zusammengeführte Trefferliste sein. Bei globaler Kappung die ausgewählten
+Wurzeln einzeln durchsuchen oder --limit erhöhen.
 Zeilentexte sind auf 2.000 Zeichen begrenzt; ask erhält höchstens rund 12.000
 JSON-Zeichen Quellenkontext und führt maximal drei Suchbegriffe pro Wurzel aus.
 
@@ -197,10 +202,11 @@ entfernt werden.
 - macOS-Zugriff verweigert: betreffende Ordner benötigen ggf. Zugriff für das
   verwendete Terminal. Nicht lesbare Pfade werden als Fehler gemeldet.
 - Index hängt: local-search status und server.log im gemeldeten Indexpfad lesen.
-- "PID identity changed": die vermerkte Prozess-ID gehört inzwischen zu einem
-  fremden Prozess, deshalb wird kein Signal gesendet. Mit ps die gemeldete PID
-  prüfen, den Prozess gegebenenfalls selbst beenden und danach owner.json im
-  gemeldeten Indexpfad löschen. Erst dann startet local-search wieder.
+- "PID identity changed": die Identität der vermerkten Prozess-ID stimmt nicht
+  mehr mit dem gespeicherten Suchserver überein; deshalb wird kein Signal gesendet.
+  Mit ps die gemeldete PID prüfen. Nur wenn die Zuordnung nachweislich veraltet ist
+  und kein Suchserver mehr diesen Index verwendet, die gemeldete owner.json
+  entfernen. Einen fremden Prozess dafür nicht beenden; anschließend erneut starten.
 - Große Verzeichnisse: mit ausgewählten Projektwurzeln beginnen; Home verbraucht
   je nach Inhalt erheblich Plattenplatz. Der Server startet mit 512 MiB
   Indexaufbau-Budget und 25 % CPU-Budget; dies ist kein hartes Prozess-RAM-Limit.
