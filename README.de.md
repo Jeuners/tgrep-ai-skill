@@ -9,6 +9,9 @@ Ein gemeinsamer Skill, eine CLI, gemeinsame Indizes. tgrep sucht Text und Code;
 Qwen übersetzt Fragen in Suchbegriffe und beantwortet sie anhand gefundener
 Ausschnitte. Die Hauptmodelle von Claude und Codex werden dabei nicht ersetzt.
 
+Gemessene Performance: Der [lokale Benchmarkbericht](docs/benchmarks/README.md)
+zeigt reproduzierbare CLI-Zeiten, Indexkosten und die Grenzen der synthetischen Tests.
+
 ## Installation
 
 Voraussetzungen: macOS oder Linux (ARM64/x86_64), Git, Python **3.10+** mit venv.
