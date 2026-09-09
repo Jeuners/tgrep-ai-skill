@@ -2,6 +2,7 @@
 
 Repo: https://github.com/Jeuners/tgrep-ai-skill
 Stand: 08.09.2026
+Status ergänzt: 09.09.2026. Die Review-Befunde unten beschreiben den damaligen Stand.
 Rollen: Astra hat implementiert, Claude (Anthropic) hat reviewt, H.G.O.D. ist AI Operator.
 
 Dieses Dokument ist die Übergabe nach dem externen Review. Es sagt dir, was geprüft
@@ -37,7 +38,9 @@ die durchgehend ehrliche Dokumentation der Grenzen (eventual consistency,
 
 ## 2. Was im Review-Commit geändert wurde
 
-Commit `8151ec6` "Default to the official qwen3.5 tag, report per-root match counts".
+Commit `5e58144` "Default to the official qwen3.5 tag, report per-root match counts".
+Der externe Patch trug ursprünglich die Commit-ID `8151ec6`; im Repository wurde
+er als `5e58144` angewendet. `8151ec6` ist kein Commit dieses Repositories.
 Fünf Dateien, 31 Zeilen rein, 10 raus. Tests danach grün.
 
 ### 2.1 Default-Modell (`src/local_search/config.py`)
@@ -121,12 +124,17 @@ Wenn eine davon fallen soll, vorher begründen, nicht nebenbei entfernen.
 
 ### 4.1 Für H.G.O.D., nicht für dich (braucht Push- bzw. UI-Rechte)
 
-- Release-Tag `v0.1.0` setzen. Die README empfiehlt für reproduzierbare Installation
-  "vorher einen Release-Tag auschecken", es existiert bisher keiner.
-- Repo-Beschreibung und Topics setzen: `claude-code`, `codex`, `agent-skills`,
-  `ollama`, `tgrep`, `ripgrep`.
+- `v0.1.0` zeigt auf `a52a726`, vor den Review-Korrekturen, und bleibt unverändert.
+  `v0.1.1` wurde am 09.09.2026 auf dem korrigierten Stand `0fce1aa` veröffentlicht.
+- Repo-Beschreibung und Topics: `claude-code`, `codex`, `agent-skills`,
+  `ollama`, `tgrep`, `ripgrep` wurden am 09.09.2026 auf GitHub gesetzt.
 
 ### 4.2 Hauptaufgabe für dich: englische README
+
+Erledigt in `632f6cc`: `README.md` ist Englisch, `README.de.md` enthält die deutsche
+Fassung, beide sind gegenseitig verlinkt. Dieser Dokumentationscommit liegt nach
+dem für `v0.1.1` ausgewählten Code-Stand `0fce1aa`.
+Die folgenden Anforderungen bleiben als ursprünglicher Auftrag dokumentiert.
 
 Die Zielgruppe für Claude-Code- und Codex-Skills ist überwiegend englischsprachig, ein
 rein deutsches README kostet praktisch die gesamte Auffindbarkeit. Vorschlag: `README.md`
