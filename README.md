@@ -1,18 +1,20 @@
 # tgrep AI Skill
 
-Lokale, indexierte Suche für **Claude Code und Codex** – mit frei wählbaren
-Verzeichnissen und optionalen Antworten von **Qwen über Ollama**.
+**English** | [Deutsch](README.de.md)
 
-Ein gemeinsamer Skill, eine CLI, gemeinsame Indizes. tgrep sucht Text und Code;
-Qwen übersetzt Fragen in Suchbegriffe und beantwortet sie anhand gefundener
-Ausschnitte. Die Hauptmodelle von Claude und Codex werden dabei nicht ersetzt.
+Local, indexed search for **Claude Code and Codex**, with directories of your
+choice and optional answers from **Qwen through Ollama**.
+
+One shared skill, one CLI, shared indexes. tgrep searches text and code;
+Qwen turns questions into search terms and answers them using matching excerpts.
+It does not replace the main models used by Claude and Codex.
 
 ## Installation
 
-Voraussetzungen: macOS oder Linux (ARM64/x86_64), Git, Python **3.10+** mit venv.
-Windows: innerhalb von WSL installieren. Kein sudo, kein pip und keine
-Python-Paketdownloads erforderlich. Der Installer lädt tgrep **1.0.5** und
-ripgrep **15.2.0** aus offiziellen Releases; SHA256-Werte stehen fest in
+Requirements: macOS or Linux (ARM64/x86_64), Git, Python **3.10+** with venv.
+On Windows, install inside WSL. No sudo, pip, or Python package downloads are
+required. The installer downloads tgrep **1.0.5** and ripgrep **15.2.0** from
+official releases, with SHA256 hashes pinned in
 [dependencies.lock.json](dependencies.lock.json).
 
 ~~~sh
@@ -23,65 +25,67 @@ export PATH="$HOME/.local/bin:$PATH"
 local-search doctor
 ~~~
 
-Der Installer richtet beide Skills ein:
+The installer sets up both skills:
 
 - Claude Code: ~/.claude/skills/local-search/
 - Codex: ~/.agents/skills/local-search/
 
-Er installiert einen unabhängigen Laufzeitordner unter
-~/.local/share/tgrep-ai-skill/. Der Checkout kann danach verschoben werden.
-Bestehende Konfiguration und Modellwahl bleiben erhalten; fremde gleichnamige
-Launcher oder Skills werden nicht überschrieben. Die Home-Wurzel wird registriert,
-aber noch nicht indexiert. Neue Agent-Sitzung öffnen, falls der Skill nicht erscheint.
+It installs a standalone runtime directory under
+~/.local/share/tgrep-ai-skill/. You can move the checkout afterward.
+Existing configuration and model choices are preserved; unrelated launchers or
+skills with the same name are not overwritten. Your home directory is registered
+as a search root, but is not indexed yet. Start a new agent session if the skill
+does not appear.
 
-Nur einen Agenten installieren:
+To install for just one agent:
 
 ~~~sh
 ./install.sh --target claude
 ./install.sh --target codex
 ~~~
 
-**Installation durch einen Agenten:** Gib Claude Code oder Codex diesen Auftrag:
+**Let an agent install it:** Give Claude Code or Codex this instruction:
 
-> Installiere https://github.com/Jeuners/tgrep-ai-skill für Claude Code und Codex.
-> Lies zuerst die README, führe den Installer aus und prüfe local-search doctor.
-> Verwende mein vorhandenes Ollama-Modell. Starte noch keine Home-Indexierung.
+> Install https://github.com/Jeuners/tgrep-ai-skill for Claude Code and Codex.
+> Read the README first, run the installer, and check local-search doctor.
+> Use my existing Ollama model. Do not start indexing my home directory yet.
 
-## Ollama und Qwen
+## Ollama and Qwen
 
-Die direkte Suche funktioniert ohne LLM. Für **ask** muss
-[Ollama](https://ollama.com/download) separat installiert und gestartet sein:
+Direct search works without an LLM. To use **ask**, install and start
+[Ollama](https://ollama.com/download) separately:
 
 ~~~sh
 ollama serve
 ~~~
 
-Bei laufender Ollama-App ist kein zweiter Server nötig. In einem weiteren Terminal:
+If the Ollama app is already running, you do not need a second server.
+In another terminal:
 
 ~~~sh
 ollama list
-# Nur falls das Modell fehlt: rund 6,6 GB Download
+# Only if the model is missing: approximately 6.6 GB download
 ollama pull qwen3.5:latest
 local-search doctor
 ~~~
 
-Dieses Modell aus der offiziellen Ollama-Library ist die Voreinstellung. Ein
-anderes installiertes Modell wählen, etwa eine kleinere Variante:
+This model from the official Ollama library is the default. To select another
+installed model, such as a smaller variant:
 
 ~~~sh
 local-search model qwen3.5:4b
 ~~~
 
-Modell und Loopback-URL stehen in ~/.config/local-search/config.json.
-Vor jeder Modellanfrage werden die Ollama-Metadaten geprüft: Cloud-Modelle,
-Remote-Aliasse und Modelle ohne erkennbare lokale Gewichte werden abgewiesen.
-Der Installer lädt weder Ollama noch Modellgewichte ungefragt herunter.
-Modellgewichte sind nicht Teil dieses MIT-Projekts; ihre eigenen Lizenzbedingungen
-gelten. Der Standardtag verweist auf die jeweils aktuelle Version und kann sich
-ändern. Ein Tag wie qwen3.5:4b legt die Modellgröße fest, bleibt aber ebenfalls
-veränderlich und garantiert keine unveränderten Modellgewichte.
+The model and loopback URL are stored in ~/.config/local-search/config.json.
+Ollama metadata is checked before every model request: cloud models, remote
+aliases, and models without identifiable local weights are rejected.
+The installer does not download Ollama or model weights without being asked.
+Model weights are not part of this MIT project; their own license terms apply.
+The default tag points to the latest version and can change. A tag such as
+qwen3.5:4b specifies the model size, but is also mutable and does not guarantee
+unchanged model weights.
 
-## Home und weitere Ordner
+## Home and other directories
 
 ~~~sh
 local-search preview home
@@ -95,23 +99,23 @@ local-search add backend "$HOME/Desktop/backend" --exclude vendor --max-filesize
 local-search status
 ~~~
 
-**preview** listet eine Dateianzahl, Beispiele und Ausschlüsse; die Zahl ist eine
-Schätzung vor Inhalts-/Binärprüfung. Bei gekappter Ausgabe ist sie eine Untergrenze.
-**index** baut synchron auf und startet danach einen Hintergrundserver. Es gibt
-keinen Login-Autostart; eine spätere Suche startet den Server bei Bedarf.
+**preview** shows a file count, examples, and exclusions. The count is an estimate
+before content and binary checks; if output is truncated, it is a lower bound.
+**index** builds the index synchronously, then starts a background server.
+There is no automatic startup at login; a later search starts the server if needed.
 
-Standardausschlüsse: .git, node_modules, .venv, venv, target, dist, build,
+Default exclusions: .git, node_modules, .venv, venv, target, dist, build,
 __pycache__, .ssh, .gnupg, .aws, .azure, .ollama, .Trash, Library, Caches.
-Ausschlüsse gelten als **Verzeichnisnamen auf jeder Ebene**.
-Standard-Dateigrößenlimit: **8 MiB**. Normale Ignore-Regeln gelten auch außerhalb
-eines Git-Repositories. Symlinks werden nicht verfolgt.
+Exclusions match **directory names at every level**.
+The default file size limit is **8 MiB**. Standard ignore rules also apply outside
+Git repositories. Symlinks are not followed.
 
-Versteckte Nachkommen werden nicht indexiert: tgrep 1.0.5 unterstützt
-serve --hidden nicht. Einen versteckten Projektordner gegebenenfalls als eigene
-Wurzel registrieren. PDFs, Office, Bilder, Archive und semantische Embedding-Suche
-sind nicht enthalten. Ausschlüsse ersetzen keine allgemeine Geheimniserkennung.
+Hidden descendants are not indexed: tgrep 1.0.5 does not support serve --hidden.
+If needed, register a hidden project directory as a separate root.
+PDFs, Office documents, images, archives, and semantic embedding search are not
+supported. Exclusions do not provide general secret detection.
 
-## Suchen
+## Searching
 
 ~~~sh
 local-search search "WebSocket" --root projekte
@@ -122,103 +126,106 @@ local-search search "Rechnungsnummer" --all --paths-only
 local-search search "removed_function" --root backend --fresh
 ~~~
 
-Ohne --root wird die spezifischste registrierte Wurzel um das aktuelle
-Arbeitsverzeichnis verwendet. --all durchsucht alle registrierten Wurzeln.
-Überlappende Treffer werden nach kanonischem Dateipfad und Zeilennummer dedupliziert;
-überlappende Indizes können trotzdem zusätzlichen Speicher und Sucharbeit kosten.
+Without --root, search uses the most specific registered root containing the
+current working directory. --all searches every registered root.
+Overlapping matches are deduplicated by canonical file path and line number;
+overlapping indexes can still use extra storage and search work.
 
-Ausgabe: JSON mit Treffern, Quellen, Backend, Aktualität, Warnungen und
-truncated. Standardmäßig höchstens 40 Treffer. --limit 100 erhöht das Limit.
-Jeder Report nennt zusätzlich match_count: die pro Wurzel und Suchanfrage
-gelieferten Treffer vor der globalen Zusammenführung. Diese Zahl ist bereits
-durch das jeweilige Suchlimit begrenzt; bei report.truncated können weitere,
-nicht gezählte Treffer existieren. Die Summe kann wegen der Deduplizierung größer
-als die zusammengeführte Trefferliste sein. Bei globaler Kappung die ausgewählten
-Wurzeln einzeln durchsuchen oder --limit erhöhen.
-Zeilentexte sind auf 2.000 Zeichen begrenzt; ask erhält höchstens rund 12.000
-JSON-Zeichen Quellenkontext und führt maximal drei Suchbegriffe pro Wurzel aus.
+Output is JSON with matches, sources, backend, freshness, warnings, and
+truncated. The default limit is 40 matches. --limit 100 increases the limit.
+Each report also includes match_count: the matches returned per root and search
+request before the global merge. This count is already capped by the individual
+search limit; when report.truncated is set, additional uncounted matches may
+exist. Because of deduplication, the sum can exceed the length of the merged
+match list. If the global result is truncated, search the selected roots
+individually or increase --limit.
+Line text is capped at 2,000 characters; ask receives at most approximately
+12,000 JSON characters of source context and runs no more than three search
+terms per root.
 
-Ein laufender Index ist **eventuell konsistent**. Während Aufbau oder erkennbar
-gestörter Aktualisierung wird frisch mit ripgrep gesucht. --fresh erzwingt das
-auch für wichtige Negativbefunde. Ein gleichzeitig verändertes Dateisystem ist
-kein atomarer Snapshot. ripgrep und tgrep können bei Randfällen ihrer
-Ignore-/Binärbehandlung abweichen.
+A running index is **eventually consistent**. During index building or a detected
+update problem, search falls back to a fresh ripgrep scan. --fresh forces this
+behavior, including when it is important to confirm that no matches exist.
+A filesystem that changes during a search is not an atomic snapshot.
+ripgrep and tgrep can differ in edge cases involving ignore rules and binary
+file handling.
 
-Exitcodes: **0** Erfolg/Treffer, **1** keine Treffer, **2** Fehler,
-**130** abgebrochen. Ollama-Ausfall ist ein Fehler bei ask; search bleibt nutzbar.
+Exit codes: **0** success/matches, **1** no matches, **2** error,
+**130** interrupted. An Ollama outage is an error for ask; search remains usable.
 
 In Claude Code: /local-search. In Codex: $local-search.
-Bei expliziten Vorgaben „immer zuerst rg“ muss die übergeordnete Regel eine
-Ausnahme erlauben; der Skill überschreibt sie nicht.
+If a higher-priority instruction explicitly says “always use rg first,” that
+instruction must allow an exception; the skill does not override it.
 
-**Datengrenze:** tgrep und Qwen arbeiten lokal. Ausgaben, die ein Claude-/Codex-Agent
-liest, gelangen dennoch in dessen Kontext. --paths-only unterdrückt Ausschnitte
-und generierte Antworten, nicht Dateinamen. Bei ask --paths-only wird nur die
-Frage zur lokalen Suchplanung an Ollama geschickt.
+**Data boundary:** tgrep and Qwen run locally. Output read by a Claude or Codex
+agent still enters that agent's context. --paths-only suppresses excerpts and
+generated answers, but not filenames. With ask --paths-only, only the question
+is sent to Ollama for local search planning.
 
-## Wartung
+## Maintenance
 
 ~~~sh
 local-search stop home
-local-search index home      # vollständiger Neuaufbau mit anschließendem Start
-local-search remove backend # Registrierung entfernen, Index behalten
+local-search index home      # rebuild completely, then start the server
+local-search remove backend # remove registration, keep the index
 ~~~
 
-Konfiguration: ~/.config/local-search/config.json.
-Indizes/Status/Serverlogs: ~/.local/share/local-search/indexes/.
-XDG_CONFIG_HOME und XDG_DATA_HOME werden unterstützt.
-Eine geänderte Wurzelkonfiguration bekommt einen neuen Indexpfad. Vor manuellen
-Konfigurationsänderungen den Server stoppen; danach neu indexieren.
+Configuration: ~/.config/local-search/config.json.
+Indexes, status, and server logs: ~/.local/share/local-search/indexes/.
+XDG_CONFIG_HOME and XDG_DATA_HOME are supported.
+Changing a root's configuration gives it a new index path. Stop the server
+before editing configuration manually, then rebuild the index.
 
-Update im Checkout:
+To update from the checkout:
 
 ~~~sh
 git pull --ff-only
 ./install.sh
 ~~~
 
-Für reproduzierbare Installation vorher einen Release-Tag auschecken. Updates
-legen einen neuen Laufzeitordner an; alte bleiben für laufende Server erhalten.
-Server stoppen und neu starten, damit sie die neue Binärdatei verwenden.
+For a reproducible installation, check out a release tag first. Updates create
+a new runtime directory; old ones remain available for running servers.
+Stop and restart servers so they use the new binary.
 
-Deinstallation:
+To uninstall:
 
 ~~~sh
 local-search stop home
-# Weitere laufende Wurzeln ebenfalls stoppen.
+# Stop any other running roots as well.
 ./install.sh --uninstall
 ~~~
 
-Entfernt den verwalteten Launcher und die Skills. Konfiguration, Indizes und alte
-Laufzeitordner bleiben absichtlich erhalten und können nach Prüfung manuell
-entfernt werden.
+This removes the managed launcher and skills. Configuration, indexes, and old
+runtime directories are deliberately retained; you can review and remove them
+manually.
 
-## Fehlerbehebung und Entwicklung
+## Troubleshooting and development
 
-- command not found: PATH setzen oder ~/.local/bin/local-search aufrufen.
-- Python/venv fehlt: Python 3.10+ installieren; unter Debian/Ubuntu gegebenenfalls
-  das passende python3-venv-Paket.
-- Modell nicht erreichbar: ollama list, laufende App bzw. ollama serve prüfen.
-- macOS-Zugriff verweigert: betreffende Ordner benötigen ggf. Zugriff für das
-  verwendete Terminal. Nicht lesbare Pfade werden als Fehler gemeldet.
-- Index hängt: local-search status und server.log im gemeldeten Indexpfad lesen.
-- "PID identity changed": die Identität der vermerkten Prozess-ID stimmt nicht
-  mehr mit dem gespeicherten Suchserver überein; deshalb wird kein Signal gesendet.
-  Mit ps die gemeldete PID prüfen. Nur wenn die Zuordnung nachweislich veraltet ist
-  und kein Suchserver mehr diesen Index verwendet, die gemeldete owner.json
-  entfernen. Einen fremden Prozess dafür nicht beenden; anschließend erneut starten.
-- Große Verzeichnisse: mit ausgewählten Projektwurzeln beginnen; Home verbraucht
-  je nach Inhalt erheblich Plattenplatz. Der Server startet mit 512 MiB
-  Indexaufbau-Budget und 25 % CPU-Budget; dies ist kein hartes Prozess-RAM-Limit.
-- Offline: Releasearchive vorher herunterladen und
-  ./install.sh --asset-cache /pfad/zu/archiven verwenden. Fehlende Archive werden
-  weiterhin online angefordert. Abhängigkeiten werden stets per SHA256 geprüft.
+- command not found: set PATH or run ~/.local/bin/local-search.
+- Missing Python/venv: install Python 3.10+; on Debian/Ubuntu, you may also need
+  the matching python3-venv package.
+- Model unavailable: check ollama list and the running app or ollama serve.
+- macOS access denied: your terminal may need permission to access the affected
+  directories. Unreadable paths are reported as errors.
+- Stuck index: check local-search status and server.log in the reported index path.
+- "PID identity changed": the recorded process ID no longer matches the saved
+  search server identity, so no signal is sent. Inspect the reported PID with ps.
+  Remove the reported owner.json only after confirming that the record is stale
+  and no search server still uses that index. Do not terminate an unrelated
+  process to resolve this; then try starting the server again.
+- Large directories: start with selected project roots. Indexing home can use
+  substantial disk space, depending on its contents. The server starts with a
+  512 MiB index-building budget and a 25 % CPU budget; this is not a hard limit
+  on total process RAM.
+- Offline installation: download the release archives in advance and use
+  ./install.sh --asset-cache /pfad/zu/archiven. Missing archives are still
+  requested online. Dependencies are always verified using SHA256.
 
 ~~~sh
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 ~~~
 
-Integrationstests mit echten Binärdateien:
+Integration tests with real binaries:
 
 ~~~sh
 LOCAL_SEARCH_INTEGRATION=1 \
@@ -227,23 +234,23 @@ LOCAL_SEARCH_RG=/pfad/zu/rg \
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 ~~~
 
-Vollständige isolierte Installation inklusive Update und Deinstallation:
-python3 scripts/smoke_install.py. Optionaler Test des vorhandenen lokalen Modells
-mit ausschließlich synthetischem Quelltext: python3 scripts/smoke_ollama.py.
+Full isolated installation, including update and uninstallation:
+python3 scripts/smoke_install.py. Optional test of an existing local model,
+using only synthetic source code: python3 scripts/smoke_ollama.py.
 
-## Herkunft und Lizenz
+## Credits and license
 
-MIT, siehe [LICENSE](LICENSE). Unabhängiges Integrationsprojekt, kein offizielles
-Microsoft-, Anthropic- oder OpenAI-Produkt.
+MIT; see [LICENSE](LICENSE). This is an independent integration project,
+not an official Microsoft, Anthropic, or OpenAI product.
 
-Autorschaft: Implementierung geschrieben mit OpenAI Astra. Review und
-Überarbeitung durch Claude von Anthropic.
+Authorship: implementation written with OpenAI Astra. Review and revisions
+by Claude from Anthropic.
 AI Operator: [H.G.O.D.](https://github.com/Jeuners).
 
 - [Microsoft tgrep](https://github.com/microsoft/tgrep), MIT
-- [ripgrep](https://github.com/BurntSushi/ripgrep), MIT oder Unlicense
+- [ripgrep](https://github.com/BurntSushi/ripgrep), MIT or Unlicense
 - [Ollama API](https://docs.ollama.com/api/chat)
 - [Claude Code Skills](https://code.claude.com/docs/en/skills)
 
-Die Installer-Downloads enthalten offizielle Binärdateien; Quellcode und
-Lizenztexte der Abhängigkeiten sind in deren verlinkten Repositories verfügbar.
+Installer downloads contain official binaries; dependency source code and
+license texts are available in their linked repositories.
